@@ -5,9 +5,9 @@ import CONFIG from '../../config.js';
 import { HumanMessage, AIMessage } from "@langchain/core/messages";
 
 
-// import { graph, getExecutionSummary } from './langgraph.js';
-
 import { graph, getExecutionSummary } from './ai-agent/index.js';
+
+import { getGroceryShoppingReply } from './grocery-ai-agent/index.js';
 
 const openaiClient = new OpenAI({
     apiKey: CONFIG.openAiApiKey,
@@ -124,10 +124,12 @@ export async function getReplyFromAgent(sessionId, chatId, message, useSmartReca
     messages.push(userMessage);
 
     // Create and run LangGraph
-    const result = await graph.invoke({
-        sessionId,
-        messages,
-    });
+    const result = await graph.invoke(
+        {
+            sessionId,
+            messages,
+        }
+    );
 
     // Get execution summary for demo/debugging
     const executionSummary = getExecutionSummary(result);
@@ -151,4 +153,17 @@ export async function getReplyFromAgent(sessionId, chatId, message, useSmartReca
     });
 
     return queryResult;
+}
+
+/**
+ * Retrieves a reply from the Grocery Shopping Agent based on the chat history and user message.
+ *
+ * @param {string} sessionId - The user's session identifier.
+ * @param {string} chatId - The chat identifier.
+ * @param {string} message - The user's message.
+ * @param {boolean} useSmartRecall - Whether to enable short-term memory for the chat.
+ */
+export async function getReplyFromGroceryAgent(sessionId, chatId, message, useSmartRecall) {
+    // Use the grocery shopping agent instead of generic agent
+    return await getGroceryShoppingReply(sessionId, chatId, message, useSmartRecall);
 }
