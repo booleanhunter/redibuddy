@@ -1,7 +1,7 @@
 import { createClient } from 'redis';
 import { LangCache } from "@redis-ai/langcache";
 
-import CONFIG from '../../config.js';
+import CONFIG from '../../../config.js';
 
 const client = await createClient({
     url: CONFIG.redisUrl,
